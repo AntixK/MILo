@@ -1,0 +1,35 @@
+[project]
+name = "milo"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "cgal>=6.0.1.post202410241521",
+    "cmake>=4.1.2",
+    "diff-gaussian-rasterization",
+    "diff-gaussian-rasterization-gof",
+    "diff-gaussian-rasterization-ms",
+    "fused-ssim",
+    "gmpy2>=2.2.1",
+    "nvdiffrast",
+    "open3d>=0.19.0",
+    "opencv-python>=4.12.0.88",
+    "plyfile>=1.1.3",
+    "scikit-image>=0.25.2",
+    "simple-knn",
+    "tetra-nerf",
+    "torch==2.7.0",
+    "torchvision>=0.22.0",
+    "tqdm>=4.67.1",
+    "trimesh>=4.9.0",
+]
+
+[tool.uv.sources]
+diff-gaussian-rasterization-ms = { path = "submodules/diff-gaussian-rasterization_ms" }
+diff-gaussian-rasterization = { path = "submodules/diff-gaussian-rasterization" }
+diff-gaussian-rasterization-gof = { path = "submodules/diff-gaussian-rasterization_gof" }
+simple-knn = { path = "submodules/simple-knn" }
+fused-ssim = { path = "submodules/fused-ssim" }
+nvdiffrast = { path = "submodules/nvdiffrast" }
+tetra-nerf = { path = "submodules/tetra_triangulation" }
