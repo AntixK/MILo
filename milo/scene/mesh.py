@@ -169,7 +169,7 @@ class MeshRasterizer(torch.nn.Module):
         self, 
         cameras:Union[List[Camera], Camera]=None,
         raster_settings:RasterizationSettings=None,
-        use_opengl=True,
+        use_opengl=False,
     ):
         super().__init__()
         

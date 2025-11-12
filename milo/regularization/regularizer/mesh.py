@@ -33,9 +33,11 @@ from utils.geometry_utils import (
 # Try importing cpp extension, handle potential ImportError
 try:
     from tetranerf.utils.extension import cpp
+    print("[INFO] Imported 'tetranerf.utils.extension.cpp'.")
 except ImportError:
     cpp = None
     print("[WARNING] Could not import 'tetranerf.utils.extension.cpp'. Mesh regularization requires this.")
+    raise ImportError("Mesh regularization requires 'tetranerf.utils.extension.cpp'. Please ensure it's compiled.")
 
 
 def initialize_mesh_regularization(

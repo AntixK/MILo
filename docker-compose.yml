@@ -1,0 +1,23 @@
+services:
+  milo-dev:
+    build:
+      context: .
+      dockerfile: dockerfile
+      # args:
+      #   USERNAME: proscan
+      #   USER_UID: 1000
+      #   USER_GID: 1000
+    container_name: milo-dev
+    tty: true
+    volumes:
+      - .:/app/Milo/:rw
+      - /mnt/anand/Projects/COLMAPDataset:/app/Milo/data/:rw
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              capabilities: [gpu]
+    environment:
+      - NUM_DEVICES=1
+      - CUDA_VISIBLE_DEVICES=0
