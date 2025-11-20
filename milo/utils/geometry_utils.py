@@ -244,7 +244,7 @@ def identify_out_of_field_points(
     n_points = points.shape[0]
     out_of_field_mask = torch.ones_like(points[:, 0], dtype=torch.bool, device=points.device)
     
-    for camera in tqdm(views, desc="Identifying out of field points"):
+    for camera in tqdm(views, desc="Identifying out of field points", dynamic_ncols=True):
         H, W = camera.image_height, camera.image_width
 
         # Transform points to view space

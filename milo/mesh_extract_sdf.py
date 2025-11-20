@@ -206,7 +206,7 @@ def extract_mesh_with_sdf_refinement(
     ema_occupied_centers_loss_for_log = 0.
     ema_occupancy_labels_loss_for_log = 0.
     
-    progress_bar = tqdm(range(refine_iter + 1), desc="Training progress")
+    progress_bar = tqdm(range(refine_iter + 1), desc="Training progress", dynamic_ncols=True)
     
     occupancy_labels, vert_colors = None, None
 

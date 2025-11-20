@@ -40,7 +40,7 @@ def initialize_depth_order_supervision(
     dav2.eval()
     depth_priors = []
     with torch.no_grad():
-        for i_image in tqdm(range(len(viewpoint_stack)), desc="Building depth priors"):
+        for i_image in tqdm(range(len(viewpoint_stack)), desc="Building depth priors", dynamic_ncols=True):
             gt_image = viewpoint_stack[i_image].original_image.permute(1, 2, 0) # H, W, C
             supervision_disparity = apply_depthanything(dav2, image=gt_image)
             supervision_disparity = (

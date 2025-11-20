@@ -167,7 +167,7 @@ def log_training_progress(
     # Flags
     reg_kick_on:bool, mesh_kick_on:bool, depth_order_kick_on:bool,
     # Losses
-    loss:torch.Tensor, depth_normal_loss:torch.Tensor, mesh_depth_loss:torch.Tensor,
+    loss:torch.Tensor, l1_loss_val:torch.Tensor, ssim_loss_val:torch.Tensor, depth_normal_loss:torch.Tensor, mesh_depth_loss:torch.Tensor,
     mesh_normal_loss:torch.Tensor, occupied_centers_loss:torch.Tensor, occupancy_labels_loss:torch.Tensor,
     depth_prior_loss:torch.Tensor,
     # Configs
@@ -197,19 +197,19 @@ def log_training_progress(
         ema_depth_order_loss_for_log = 0.4 * depth_prior_loss.item() + 0.6 * ema_depth_order_loss_for_log
     
     if iteration % 10 == 0:
-        postfix_dict = {"Loss": f"{ema_loss_for_log:.{7}f}"}
+        postfix_dict = {"Loss": f"{ema_loss_for_log:.{5}f}", "L1Loss": f"{l1_loss_val.item():.{5}f}", "SSIMLoss": f"{ssim_loss_val.item():.{5}f}"}
         if reg_kick_on:
-            postfix_dict["DNLoss"] = f"{ema_depth_normal_loss_for_log:.{7}f}"
+            postfix_dict["DNLoss"] = f"{ema_depth_normal_loss_for_log:.{5}f}"
         if depth_order_kick_on:
-            postfix_dict["DOLoss"] = f"{ema_depth_order_loss_for_log:.{7}f}"
+            postfix_dict["DOLoss"] = f"{ema_depth_order_loss_for_log:.{5}f}"
         if mesh_kick_on:
-            postfix_dict["MDLoss"] = f"{ema_mesh_depth_loss_for_log:.{7}f}"
-            postfix_dict["MNLoss"] = f"{ema_mesh_normal_loss_for_log:.{7}f}"
+            postfix_dict["MDLoss"] = f"{ema_mesh_depth_loss_for_log:.{5}f}"
+            postfix_dict["MNLoss"] = f"{ema_mesh_normal_loss_for_log:.{5}f}"
             if mesh_config["enforce_occupied_centers"]:
-                postfix_dict["OccLoss"] = f"{ema_occupied_centers_loss_for_log:.{7}f}"
+                postfix_dict["OccLoss"] = f"{ema_occupied_centers_loss_for_log:.{5}f}"
             if mesh_config["use_occupancy_labels_loss"]:
-                postfix_dict["OccLabLoss"] = f"{ema_occupancy_labels_loss_for_log:.{7}f}"
-        postfix_dict["N_Gauss"] = f"{gaussians._xyz.shape[0]}"
+                postfix_dict["OccLabLoss"] = f"{ema_occupancy_labels_loss_for_log:.{5}f}"
+        postfix_dict["N_Gauss"] = f"{gaussians._xyz.shape[0]:,}"
         progress_bar.set_postfix(postfix_dict)
         progress_bar.update(10)
         

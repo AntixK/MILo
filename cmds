@@ -1,0 +1,65 @@
+# COLMAP
+
+colmap feature_extractor --database_path=/app/Milo/data/mihama/database.db --image_path=/app/Milo/data/mihama/images/ --ImageReader.camera_model PINHOLE --ImageReader.single_camera=1
+
+
+# Step 2: Match the features pairwise
+
+colmap exhaustive_matcher --database_path=/app/Milo/data/mihama/database.db
+
+# Step 3: Map the images to a sparse model
+
+glomap mapper --database_path /app/Milo/data/mihama/database.db --image_path=/app/Milo/data/mihama/images/ --output_path=/app/Milo/data/mihama/sparse 
+
+#Step 4: Convert the sparse model to a ply file
+
+colmap model_converter --input_path /app/Milo/data/mihama/sparse/0 --output_path /app/Milo/data/mihama/sparse/sparse.ply --output_type PLY
+
+colmap model_converter --input_path /app/Milo/data/mihama/sparse/0  --output_path /app/Milo/data/mihama/sparse/0 --output_type TXT
+
+# ================================================
+python train.py \
+    -s <PATH TO COLMAP DATASET> \
+    -m <OUTPUT_DIR> \
+    --imp_metric "outdoor" \
+    --rasterizer <"radegs" OR "gof"> \
+    --dense_gaussians \
+    --data_device cpu \
+    --log_interval 200 \
+    --mesh_config default
+
+
+
+# Ignatius
+python train.py -s /app/Milo/data/Ignatius -m ./output/ignatius_radegs --imp_metric "outdoor" --rasterizer "radegs" --dense_gaussians --data_device cpu --log_interval 200 --mesh_config highres --config_path ./configs/mihama_cfg --wandb_project "ignatius" --wandb_entity milo-experiments 
+
+python mesh_extract_sdf.py -s /app/Milo/data/Ignatius -m ./output/ignatius_radegs --rasterizer "gof" --config highres --iteration 30000
+
+python mesh_extract_integration.py -s /app/Milo/data/Ignatius -m ./output/ignatius_radegs --rasterizer gof --sdf_mode depth_fusion --iteration 30000
+
+# ================================================
+
+# Mihama-GS
+
+python train.py -s /app/Milo/data/mihama-gs -m ./output/mihama_gs_radegs --imp_metric "outdoor" --rasterizer "radegs" --dense_gaussians --data_device cpu --log_interval 200 --mesh_config highres --config_path ./configs/mihama_cfg --wandb_project "mihama-gs" --wandb_entity milo-experiments 
+
+python mesh_extract_sdf.py -s /app/Milo/data/mihama-gs -m ./output/mihama_gs_radegs --rasterizer "gof" --config highres --iteration 30000
+
+python mesh_extract_integration.py -s /app/Milo/data/mihama-gs -m ./output/mihama_gs_radegs --rasterizer gof --sdf_mode depth_fusion --iteration 30000
+
+# ================================================
+
+# Mihama (resized)
+python train.py -s /app/Milo/data/mihama -m ./output/mihama_radegs --imp_metric "outdoor" --rasterizer "radegs" --dense_gaussians --data_device cpu --log_interval 200 --mesh_config highres --config_path ./configs/mihama_cfg 
+
+python mesh_extract_sdf.py -s /app/Milo/data/mihama -m ./output/mihama_radegs --rasterizer "gof" --config highres --iteration 30000
+
+python mesh_extract_integration.py -s /app/Milo/data/mihama -m ./output/mihama_radegs --rasterizer gof --sdf_mode depth_fusion --iteration 30000
+
+# ================================================
+# Soil
+python train.py -s /app/Milo/data/soil -m ./output/soil_radegs --imp_metric "outdoor" --rasterizer "radegs" --dense_gaussians --data_device cpu --log_interval 200 --mesh_config highres --config_path ./configs/mihama_cfg 
+
+python mesh_extract_sdf.py -s /app/Milo/data/soil -m ./output/soil_radegs --rasterizer "gof" --config highres --iteration 30000
+
+python mesh_extract_integration.py -s /app/Milo/data/soil -m ./output/soil_radegs --rasterizer gof --sdf_mode depth_fusion --iteration 30000

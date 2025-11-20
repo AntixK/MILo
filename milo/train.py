@@ -138,7 +138,7 @@ def training(
     print(f"\nTotal number of optimizable parameters: {n_total_params}\n")
     
     # ---Start optimization loop---    
-    progress_bar = tqdm(range(first_iter, opt.iterations), desc="Training progress")
+    progress_bar = tqdm(range(first_iter, opt.iterations), desc="Training progress", dynamic_ncols=True)
     first_iter += 1
 
     for iteration in range(first_iter, opt.iterations + 1):   
@@ -329,7 +329,7 @@ def training(
                 mesh_render_pkg if mesh_kick_on else None, 
                 do_supervision_depth if depth_order_kick_on else None,
                 reg_kick_on, mesh_kick_on, depth_order_kick_on,
-                loss, depth_normal_loss if reg_kick_on else None, 
+                loss, Ll1, ssim_value, depth_normal_loss if reg_kick_on else None, 
                 mesh_depth_loss if mesh_kick_on else None, mesh_normal_loss if mesh_kick_on else None, 
                 occupied_centers_loss if mesh_kick_on else None, occupancy_labels_loss if mesh_kick_on else None, 
                 depth_prior_loss if depth_order_kick_on else None,

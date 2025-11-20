@@ -11,7 +11,7 @@ services:
     tty: true
     volumes:
       - .:/app/Milo/:rw
-      - /mnt/anand/Projects/COLMAPDataset:/app/Milo/data/:rw
+      - /home/eb-anands/exp/sfm_proj/mihama-gs:/app/Milo/data/mihama-gs:rw
     deploy:
       resources:
         reservations:
@@ -19,5 +19,5 @@ services:
             - driver: nvidia
               capabilities: [gpu]
     environment:
-      - NUM_DEVICES=1
-      - CUDA_VISIBLE_DEVICES=0
+      - NUM_DEVICES=4
+      - CUDA_VISIBLE_DEVICES=0,1,2,3
