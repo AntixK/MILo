@@ -60,6 +60,16 @@ python mesh_extract_integration.py -s /app/Milo/data/mihama -m ./output/mihama_r
 # Soil
 python train.py -s /app/Milo/data/soil -m ./output/soil_radegs --imp_metric "outdoor" --rasterizer "radegs" --dense_gaussians --data_device cpu --log_interval 200 --mesh_config highres --config_path ./configs/mihama_cfg 
 
-python mesh_extract_sdf.py -s /app/Milo/data/soil -m ./output/soil_radegs --rasterizer "gof" --config highres --iteration 30000
+
+python train.py -s /app/Milo/data/soil -m ./output/soil_gof --imp_metric "outdoor" --rasterizer "gof" --depth_order --data_device cpu --log_interval 200 --mesh_config highres
+
+python mesh_extract_sdf.py -s /app/Milo/data/soil -m ./output/soil_radegs --rasterizer "gof" --config highres --remove_oof_vertices --iteration 30000
 
 python mesh_extract_integration.py -s /app/Milo/data/soil -m ./output/soil_radegs --rasterizer gof --sdf_mode depth_fusion --iteration 30000
+
+# ============= SOIL no - Mesh
+python train.py -s /app/Milo/data/soil -m ./output/soil --imp_metric "outdoor" --log_interval 2000 --no_mesh_regularization --config_path ./configs/mihama_cfg 
+
+
+# ============= Mihama no - Mesh
+python train.py -s /app/Milo/data/mihama -m ./output/mihama --imp_metric "outdoor" --log_interval 2000 --no_mesh_regularization --config_path ./configs/mihama_cfg 
